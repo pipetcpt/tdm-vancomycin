@@ -74,10 +74,19 @@ shiny::shinyServer(function(input, output) {
     
     CLCR <- calculate_crcl(AGE, WEIGHT, input$sex, SCR)
     
+    #	    Dose Data1 -------------------
+    input_file_text <- ifelse(is.null(input$file1),
+                              yes = default_dose_example_csv,
+                              no = input$file1$datapath)
+    
+    rawdata <- read_csv(input_file_text, col_types = 'cccd') %>%
+      as.data.frame() %>%
+      print()
+    
     #	1. Dose Data1		   ------------------------------
     
-    rawdata=read.csv(inFile$datapath,header=T)
-    rawdata
+    #rawdata=read.csv(inFile$datapath,header=T)
+    #rawdata
     
     rawdata2=rawdata[complete.cases(rawdata), ]
     rawdata2
@@ -537,8 +546,8 @@ shiny::shinyServer(function(input, output) {
   )
   
   output$dosing_history_contents <- renderTable({
-    if (is.null(input$file1)) return(read_csv(default_dose_example_csv))
-    return(read_csv(input$file1$datapath))
+    if (is.null(input$file1)) return(read_csv(default_dose_example_csv, col_types='cccn'))
+    return(read_csv(input$file1$datapath, col_types='cccn'))
   })
   
   # crcl: https://www.mdcalc.com/creatinine-clearance-cockcroft-gault-equation
@@ -636,9 +645,17 @@ shiny::shinyServer(function(input, output) {
     CLCR <- calculate_crcl(AGE, WEIGHT, input$sex, SCR)
     
     #	    Dose Data1 -------------------
+    input_file_text <- ifelse(is.null(input$file1),
+                              yes = default_dose_example_csv,
+                              no = input$file1$datapath)
     
-    rawdata=read.csv(inFile$datapath,header=T)
-    rawdata
+    rawdata <- read_csv(input_file_text, col_types = 'cccd') %>%
+      as.data.frame() %>%
+      print()
+    
+    
+    #rawdata=read.csv(inFile$datapath,header=T)
+    #rawdata
     
     rawdata2=rawdata[complete.cases(rawdata), ]
     rawdata2
